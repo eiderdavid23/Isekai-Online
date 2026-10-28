@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+<title>Isekai Online</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#12101a;color:#eee;font-family:system-ui,sans-serif;display:flex;flex-direction:column;align-items:center;touch-action:manipulation;-webkit-user-select:none;user-select:none}
+#hud{width:100%;max-width:420px;padding:8px 10px;font-size:14px;display:grid;grid-template-columns:1fr 1fr;gap:4px}
+.bar{height:8px;background:#333;border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%}
+#hp i{background:#e5484d}#hg i{background:#f5a524}#xp i{background:#7c5cff}
+canvas{width:100%;max-width:420px;aspect-ratio:1;background:#000;border-radius:8px}
+#log{width:100%;max-width:420px;min-height:44px;padding:8px 10px;font-size:13px;color:#9be7ff}
+#pad{display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(2,64px);gap:6px;margin:6px 0}
+button{background:#2a2540;color:#fff;border:1px solid #4b4370;border-radius:12px;font-size:22px}
+button:active{background:#4b4370}
+#inv{width:100%;max-width:420px;display:flex;justify-content:space-between;align-items:center;padding:4px 10px 12px;font-size:14px}
+#eat{font-size:14px;padding:8px 14px}
+</style>
+</head>
+<body>
+<div id="hud">
+  <div>❤️ Vida<div class="bar" id="hp"><i></i></div></div>
+  <div>🍖 Hambre<div class="bar" id="hg"><i></i></div></div>
+  <div>⭐ Nv <span id="lv">1</span><div class="bar" id="xp"><i></i></div></div>
+  <div>📅 Día <span id="day">1</span></div>
+</div>
+<canvas id="c" width="440" height="440"></canvas>
+<div id="log"></div>
+<div id="inv">
+  <span>🪵 <b id="wood">0</b> &nbsp; 🪨 <b id="stone">0</b> &nbsp; 🫐 <b id="food">0</b></span>
+  <button id="eat">Comer 🫐</button>
+</div>
+<div id="pad">
+  <span></span><button data-d="0,-1">⬆️</button><span></span>
+  <button data-d="-1,0">⬅️</button><button data-d="0,1">⬇️</button><button data-d="1,0">➡️</button>
+</div>
+<script>
+const W=60,V=11,cv=document.getElementById('c'),cx=cv.getContext('2d'),ts=cv.width/V;
+function rng(s){return()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+const r=rng(Date.now()%100000);
+const map=[];
+for(let y=0;y<W;y++){map[y]=[];for(let x=0;x<W;x++){
+  const v=r();let t='.';
+  if(x==0||y==0||x==W-1||y==W-1)t='~';
+  else if(v<.12)t='T';else if(v<.17)t='R';else if(v<.21)t='B';else if(v<.24)t='~';
+  map[y][x]=t}}
+const P={x:30,y:30,hp:100,hg:100,lv:1,xp:0,steps:0,wood:0,stone:0,food:0};
+for(let y=28;y<=32;y++)for(let x=28;x<=32;x++)map[y][x]='.';
+const E={T:'🌲',R:'🪨',B:'🫐','~':'🌊'};
+const logEl=document.getElementById('log');
+function say(m){logEl.textContent=m}
+say('[Sistema] Has despertado en otro mundo… sobrevive y explora.');
+function draw(){
+  cx.clearRect(0,0,cv.width,cv.height);
+  cx.font=(ts*.75)+'px serif';cx.textAlign='center';cx.textBaseline='middle';
+  const h=(V-1)/2;
+  for(let j=0;j<V;j++)for(let i=0;i<V;i++){
+    const mx=P.x-h+i,my=P.y-h+j;
+    const t=(mx<0||my<0||mx>=W||my>=W)?'~':map[my][mx];
+    cx.fillStyle=t=='~'?'#1b4b7a':((mx+my)%2?'#2d6a3a':'#2a6236');
+    cx.fillRect(i*ts,j*ts,ts,ts);
+    if(E[t])cx.fillText(E[t],i*ts+ts/2,j*ts+ts/2+2);
+  }
+  cx.fillText('🧙',h*ts+ts/2,h*ts+ts/2+2);
+  const q=(id,v)=>document.querySelector('#'+id+' i').style.width=Math.max(0,Math.min(100,v))+'%';
+  q('hp',P.hp);q('hg',P.hg);q('xp',P.xp/(P.lv*5)*100);
+  lv.textContent=P.lv;day.textContent=Math.floor(P.steps/100)+1;
+  wood.textContent=P.wood;stone.textContent=P.stone;food.textContent=P.food;
+}
+function gain(){P.xp++;if(P.xp>=P.lv*5){P.xp=0;P.lv++;P.hp=100;say('[Sistema] ¡Subiste al nivel '+P.lv+'! Vida restaurada.')}}
+function move(dx,dy){
+  if(P.hp<=0)return;
+  const nx=P.x+dx,ny=P.y+dy;
+  if(nx<0||ny<0||nx>=W||ny>=W)return;
+  const t=map[ny][nx];
+  if(t=='~'){say('El agua te bloquea el paso.');return}
+  if(t=='T'){P.wood++;map[ny][nx]='.';gain();say('Recolectaste 🪵 madera.')}
+  else if(t=='R'){P.stone++;map[ny][nx]='.';gain();say('Recolectaste 🪨 piedra.')}
+  else if(t=='B'){P.food++;map[ny][nx]='.';gain();say('Recolectaste 🫐 bayas.')}
+  P.x=nx;P.y=ny;P.steps++;
+  P.hg-=.6;
+  if(P.hg<=0){P.hg=0;P.hp-=3;say('¡Tienes hambre! Pierdes vida.')}
+  if(P.hp<=0){say('[Sistema] Has muerto… reencarnando.');setTimeout(()=>{P.x=30;P.y=30;P.hp=100;P.hg=100;draw()},1500)}
+  draw();
+}
+document.querySelectorAll('#pad button').forEach(b=>b.onclick=()=>{const[d,e]=b.dataset.d.split(',').map(Number);move(d,e)});
+document.getElementById('eat').onclick=()=>{
+  if(P.food<1){say('No tienes bayas.');return}
+  P.food--;P.hg=Math.min(100,P.hg+25);P.hp=Math.min(100,P.hp+5);say('Comiste 🫐. ¡Mejor!');draw()};
+addEventListener('keydown',e=>{const m={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]}[e.key];if(m)move(...m)});
+draw();
+</script>
+</body>
+</html>
