@@ -16,8 +16,11 @@ canvas{width:100%;max-width:420px;aspect-ratio:1;background:#000;border-radius:8
 #pad{display:grid;grid-template-columns:repeat(3,64px);grid-template-rows:repeat(2,64px);gap:6px;margin:6px 0}
 button{background:#2a2540;color:#fff;border:1px solid #4b4370;border-radius:12px;font-size:22px}
 button:active{background:#4b4370}
-#inv{width:100%;max-width:420px;display:flex;justify-content:space-between;align-items:center;padding:4px 10px 12px;font-size:14px}
+#inv{width:100%;max-width:420px;display:flex;justify-content:space-between;align-items:center;padding:4px 10px;font-size:14px}
+#craft{width:100%;max-width:420px;display:flex;gap:6px;padding:4px 10px 8px}
+.cr{flex:1;font-size:12px;padding:8px 4px}
 #eat{font-size:14px;padding:8px 14px}
+#reset{font-size:12px;padding:6px 12px;margin:4px 0 16px;background:#3a1f26;border-color:#7a3340}
 </style>
 </head>
 <body>
@@ -25,7 +28,7 @@ button:active{background:#4b4370}
   <div>❤️ Vida<div class="bar" id="hp"><i></i></div></div>
   <div>🍖 Hambre<div class="bar" id="hg"><i></i></div></div>
   <div>⭐ Nv <span id="lv">1</span><div class="bar" id="xp"><i></i></div></div>
-  <div>📅 Día <span id="day">1</span></div>
+  <div>📅 Día <span id="day">1</span> &nbsp; <span id="tools"></span></div>
 </div>
 <canvas id="c" width="440" height="440"></canvas>
 <div id="log"></div>
@@ -33,12 +36,18 @@ button:active{background:#4b4370}
   <span>🪵 <b id="wood">0</b> &nbsp; 🪨 <b id="stone">0</b> &nbsp; 🫐 <b id="food">0</b></span>
   <button id="eat">Comer 🫐</button>
 </div>
+<div id="craft">
+  <button class="cr" data-k="axe">🪓 Hacha<br>3🪵 1🪨</button>
+  <button class="cr" data-k="pick">⛏️ Pico<br>3🪵 3🪨</button>
+  <button class="cr" data-k="fire">🔥 Fogata<br>5🪵 2🪨</button>
+</div>
 <div id="pad">
   <span></span><button data-d="0,-1">⬆️</button><span></span>
   <button data-d="-1,0">⬅️</button><button data-d="0,1">⬇️</button><button data-d="1,0">➡️</button>
 </div>
+<button id="reset">Nueva partida</button>
 <script>
-const W=60,V=11,cv=document.getElementById('c'),cx=cv.getContext('2d'),ts=cv.width/V;
+const W=60,V=11,KEY='isekai_save_v1',cv=document.getElementById('c'),cx=cv.getContext('2d'),ts=cv.width/V;
 function rng(s){return()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 const r=rng(Date.now()%100000);
 const map=[];
@@ -47,12 +56,17 @@ for(let y=0;y<W;y++){map[y]=[];for(let x=0;x<W;x++){
   if(x==0||y==0||x==W-1||y==W-1)t='~';
   else if(v<.12)t='T';else if(v<.17)t='R';else if(v<.21)t='B';else if(v<.24)t='~';
   map[y][x]=t}}
-const P={x:30,y:30,hp:100,hg:100,lv:1,xp:0,steps:0,wood:0,stone:0,food:0};
+const P={x:30,y:30,hp:100,hg:100,lv:1,xp:0,steps:0,wood:0,stone:0,food:0,axe:false,pick:false};
 for(let y=28;y<=32;y++)for(let x=28;x<=32;x++)map[y][x]='.';
-const E={T:'🌲',R:'🪨',B:'🫐','~':'🌊'};
+const E={T:'🌲',R:'🪨',B:'🫐','~':'🌊',F:'🔥'};
+const COST={axe:{w:3,s:1},pick:{w:3,s:3},fire:{w:5,s:2}};
 const logEl=document.getElementById('log');
 function say(m){logEl.textContent=m}
-say('[Sistema] Has despertado en otro mundo… sobrevive y explora.');
+function save(){try{localStorage.setItem(KEY,JSON.stringify({P:P,map:map.map(f=>f.join(''))}))}catch(e){}}
+function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(s&&s.map&&s.map.length==W){Object.assign(P,s.P);for(let y=0;y<W;y++)map[y]=s.map[y].split('');return true}}catch(e){}return false}
+if(load())say('[Sistema] Partida cargada. Sigue tu aventura.');
+else say('[Sistema] Has despertado en otro mundo… sobrevive y explora.');
+function nearFire(){for(let j=-1;j<=1;j++)for(let i=-1;i<=1;i++){const row=map[P.y+j];if(row&&row[P.x+i]=='F')return true}return false}
 function draw(){
   cx.clearRect(0,0,cv.width,cv.height);
   cx.font=(ts*.75)+'px serif';cx.textAlign='center';cx.textBaseline='middle';
@@ -69,6 +83,7 @@ function draw(){
   q('hp',P.hp);q('hg',P.hg);q('xp',P.xp/(P.lv*5)*100);
   lv.textContent=P.lv;day.textContent=Math.floor(P.steps/100)+1;
   wood.textContent=P.wood;stone.textContent=P.stone;food.textContent=P.food;
+  tools.textContent=(P.axe?'🪓':'')+(P.pick?'⛏️':'');
 }
 function gain(){P.xp++;if(P.xp>=P.lv*5){P.xp=0;P.lv++;P.hp=100;say('[Sistema] ¡Subiste al nivel '+P.lv+'! Vida restaurada.')}}
 function move(dx,dy){
@@ -77,19 +92,35 @@ function move(dx,dy){
   if(nx<0||ny<0||nx>=W||ny>=W)return;
   const t=map[ny][nx];
   if(t=='~'){say('El agua te bloquea el paso.');return}
-  if(t=='T'){P.wood++;map[ny][nx]='.';gain();say('Recolectaste 🪵 madera.')}
-  else if(t=='R'){P.stone++;map[ny][nx]='.';gain();say('Recolectaste 🪨 piedra.')}
+  if(t=='T'){const n=P.axe?2:1;P.wood+=n;map[ny][nx]='.';gain();say('Recolectaste '+n+' 🪵 madera.')}
+  else if(t=='R'){const n=P.pick?2:1;P.stone+=n;map[ny][nx]='.';gain();say('Recolectaste '+n+' 🪨 piedra.')}
   else if(t=='B'){P.food++;map[ny][nx]='.';gain();say('Recolectaste 🫐 bayas.')}
   P.x=nx;P.y=ny;P.steps++;
-  P.hg-=.6;
-  if(P.hg<=0){P.hg=0;P.hp-=3;say('¡Tienes hambre! Pierdes vida.')}
-  if(P.hp<=0){say('[Sistema] Has muerto… reencarnando.');setTimeout(()=>{P.x=30;P.y=30;P.hp=100;P.hg=100;draw()},1500)}
-  draw();
+  if(nearFire()){P.hp=Math.min(100,P.hp+2);if(t=='.')say('🔥 El calor de la fogata te recupera.')}
+  else{
+    P.hg-=.6;
+    if(P.hg<=0){P.hg=0;P.hp-=3;say('¡Tienes hambre! Pierdes vida.')}
+  }
+  if(P.hp<=0){say('[Sistema] Has muerto… reencarnando.');setTimeout(()=>{P.x=30;P.y=30;P.hp=100;P.hg=100;draw();save()},1500)}
+  draw();save();
+}
+function craft(k){
+  const c=COST[k];
+  if(k=='axe'&&P.axe){say('Ya tienes el hacha.');return}
+  if(k=='pick'&&P.pick){say('Ya tienes el pico.');return}
+  if(P.wood<c.w||P.stone<c.s){say('Te faltan materiales: '+c.w+' 🪵 y '+c.s+' 🪨');return}
+  P.wood-=c.w;P.stone-=c.s;
+  if(k=='axe'){P.axe=true;say('[Sistema] Fabricaste 🪓 Hacha: la madera rinde x2.')}
+  if(k=='pick'){P.pick=true;say('[Sistema] Fabricaste ⛏️ Pico: la piedra rinde x2.')}
+  if(k=='fire'){map[P.y][P.x]='F';say('[Sistema] Colocaste una 🔥 Fogata. Cerca de ella no pasas hambre y te curas.')}
+  gain();gain();draw();save();
 }
 document.querySelectorAll('#pad button').forEach(b=>b.onclick=()=>{const[d,e]=b.dataset.d.split(',').map(Number);move(d,e)});
+document.querySelectorAll('.cr').forEach(b=>b.onclick=()=>craft(b.dataset.k));
 document.getElementById('eat').onclick=()=>{
   if(P.food<1){say('No tienes bayas.');return}
-  P.food--;P.hg=Math.min(100,P.hg+25);P.hp=Math.min(100,P.hp+5);say('Comiste 🫐. ¡Mejor!');draw()};
+  P.food--;P.hg=Math.min(100,P.hg+25);P.hp=Math.min(100,P.hp+5);say('Comiste 🫐. ¡Mejor!');draw();save()};
+document.getElementById('reset').onclick=()=>{if(confirm('¿Borrar tu partida y empezar de nuevo?')){try{localStorage.removeItem(KEY)}catch(e){}location.reload()}};
 addEventListener('keydown',e=>{const m={ArrowUp:[0,-1],ArrowDown:[0,1],ArrowLeft:[-1,0],ArrowRight:[1,0]}[e.key];if(m)move(...m)});
 draw();
 </script>

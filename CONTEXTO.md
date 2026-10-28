@@ -34,7 +34,8 @@ El jugador despierta reencarnado en otro mundo, sin recuerdos, con un "sistema" 
 - Plataforma inicial: **web (HTML/JS), pensada para jugarse y programarse desde el teléfono**.
 - Empezar sin online; añadirlo en la Fase 4.
 - Repo en GitHub (privado): **Isekai-Online**
-- Archivos creados con Termux (cat/EOF) y subidos con git.
+- Archivos creados con Termux (cat/EOF) y subidos con git (add, commit, push).
+- Guardado local con localStorage (clave `isekai_save_v1`).
 
 ## 6. Registro de progreso
 
@@ -43,16 +44,17 @@ El jugador despierta reencarnado en otro mundo, sin recuerdos, con un "sistema" 
 - [x] Crear este CONTEXTO.md con reglas de trabajo
 - [x] Crear el repo en GitHub (Isekai-Online)
 - [x] `index.html` v0.1: mapa procedural 60x60, movimiento con botones, recolección (madera, piedra, bayas), hambre, vida, nivel/XP, día, mensajes del "Sistema", reencarnar al morir
+- [x] Subir v0.1 al repo con Termux
+- [x] `index.html` v0.2: crafteo (hacha, pico, fogata), guardado automático, botón de nueva partida
 
 ### 🔧 EN CURSO
-- [ ] Subir CONTEXTO.md e index.html al repo con Termux y probar el juego
+- [ ] Subir v0.2 al repo y probar el juego en el navegador
 
 ### 📋 PENDIENTE
-- [ ] Publicar el juego con GitHub Pages para jugarlo desde el teléfono
-- [ ] Crafteo (hacha, pico, fogata)
-- [ ] Guardado automático del progreso
-- [ ] Diseño detallado: mundo, clases, primer arco de historia
+- [ ] Probar/publicar el juego para jugarlo desde el teléfono (servidor local o GitHub Pages)
+- [ ] Enemigos y combate básico
 - [ ] Misiones y primer arco de historia (Fase 2)
+- [ ] Diseño detallado: mundo, clases, primer arco de historia
 
 ## 7. Notas para el siguiente chat
 *(Aquí se anota cualquier detalle importante al cerrar cada sesión.)*
