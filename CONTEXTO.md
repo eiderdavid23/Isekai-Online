@@ -54,6 +54,7 @@ El jugador despierta reencarnado en otro mundo, sin recuerdos, con un "sistema" 
 - [x] index.html v0.3 (3D): terreno, cielo con día/noche, personaje, joystick y cámara, árboles/rocas/bayas, recolección, hambre, vida, nivel, crafteo (hacha, pico, fogata), login con Supabase, guardado en la nube, aviso de nueva versión
 - [x] Subir v0.3 al repo
 - [x] v0.3.1: archivos PWA creados (manifest.json, sw.js, icon-192.png, icon-512.png)
+- [x] Archivos de la APK creados: package.json, capacitor.config.json, www/index.html, .gitignore y workflow .github/workflows/apk.yml
 
 ### 🔧 EN CURSO
 - [ ] Subir v0.3.1 y publicar en GitHub Pages
@@ -62,7 +63,7 @@ El jugador despierta reencarnado en otro mundo, sin recuerdos, con un "sistema" 
 - [ ] Instalar la PWA desde Chrome y probarla
 
 ### 📋 PENDIENTE
-- [ ] APK con GitHub Actions (Capacitor, carga la URL de Pages)
+- [ ] APK: correr el workflow Build APK en GitHub Actions, descargarla desde Releases e instalarla
 - [ ] Optimizar rendimiento si va lento (instancing de árboles y rocas)
 - [ ] Mejorar estética anime: contornos, nubes, estrellas, flores, agua animada
 - [ ] Enemigos y combate básico

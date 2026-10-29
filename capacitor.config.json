@@ -1,0 +1,8 @@
+{
+  "appId": "com.isekai.online",
+  "appName": "Isekai Online",
+  "webDir": "www",
+  "server": {
+    "url": "https://eiderdavid23.github.io/Isekai-Online/"
+  }
+}
