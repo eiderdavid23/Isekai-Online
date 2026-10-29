@@ -47,6 +47,7 @@ El jugador despierta reencarnado en otro mundo, con un "Sistema" que le da misio
 - `controls.js`: reacomoda los botones (mueve los nodos existentes a #ctl y al menu #mpan, no se crean botones nuevos) y activa setPointerCapture en el canvas. Va al final: debe cargar despues de enemies.js y dungeon.js.
 - `guild.js`: bendicion (S.st = fue,res,des,agi,mag; rango = letra por cada 100 puntos) y gremio (boton contextual cerca de la puerta del gremio, S.bl = ya recibio la bendicion, S.qs = misiones, S.val = valis, S.gt = totales recolectados). Sube stats comparando S cada frame, sin tocar otros archivos. Efectos: fuerza=dano, agilidad=velocidad, magia=cura (con sed en enemies.js, dungeon.js, index.html); resistencia=regeneracion y destreza=recoleccion extra (dentro de guild.js).
 - `story.js`: arco de historia (S.arc = c capitulo, ph fase 0 hablar/1 objetivo, b base). NPCs Orvin (-10,4) y Eldara (0,25, puerta norte) con marcador ! ? y boton Hablar; dialogos por toque; diario arriba a la izquierda. Se engancha a updVisuals y va despues de guild.js.
+- `world.js`: animales (conejos wander/huida, boton Atrapar) y clima (lluvia/niebla cada 70-140 s, solo cosmetico). Envuelve updVisuals; va despues de story.js. Cambia scene.fog.near/far cada frame fuera de la mazmorra.
 - Orden en index.html antes de `</body>`: enemies.js, visuals.js, city.js, dungeon.js, controls.js, guild.js y luego story.js. En el bucle principal, justo antes de `renderer.render`: `updEnemies` y `updVisuals`.
 - `manifest.json`, `sw.js`, `icon-192.png`, `icon-512.png`: PWA instalable (horizontal).
 - `version.json`: versión actual para el aviso de actualización.
@@ -84,7 +85,8 @@ El jugador despierta reencarnado en otro mundo, con un "Sistema" que le da misio
 
 ### 📋 PENDIENTE (orden propuesto)
 - [x] v0.10.0: Primer arco "El Susurro de la Torre" (story.js): NPCs Orvin y Eldara, 3 capitulos, diario de mision
-- [ ] Mundo más vivo: NPCs, aldeas, animales, clima
+- [x] v0.11.0: mundo mas vivo (world.js): 22 conejos que huyen y se atrapan con boton Atrapar (+3 comida, S.hunt), clima aleatorio (despejado, lluvia, niebla) con gotas, niebla y filtro gris
+- [ ] Mundo más vivo: aldeas y NPCs de aldea (animales y clima ya hechos en v0.11.0)
 - [ ] Optimizar rendimiento si hace falta (bajar hierba: const N en visuals.js)
 - [ ] Online en tiempo real (al final)
 
