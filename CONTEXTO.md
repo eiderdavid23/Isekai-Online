@@ -42,7 +42,8 @@ El jugador despierta reencarnado en otro mundo, con un "Sistema" que le da misio
 - `index.html`: núcleo del juego (Three.js r128 + Supabase JS por CDN). Globales que usan los demás archivos: `S` (partida), `scene`, `cam`, `renderer`, `player`, `water`, `objs`, `sun`, `hemi`, `H(x,z)` (altura del terreno), `toon(color)`, `build(seed)`, `hud()`, `say(msg)`, `gain()`, `nearFire()`, `nearest()`, `CYC`, `R`, `jx`, `jy`, `pitch`, `started`, `dirty`. **No redeclarar** estos nombres en otros archivos.
 - `enemies.js`: slimes y combate. Se engancha con `window.updEnemies(dt, now)` y crea los botones de atacar y curar.
 - `visuals.js`: estilo anime. Se engancha con `window.updVisuals(dt, now)`, expone `window.outlineGroup(grupo)` y envuelve `window.build` para redondear los árboles.
-- Orden en index.html antes de `</body>`: enemies.js y luego visuals.js. En el bucle principal, justo antes de `renderer.render`: `updEnemies` y `updVisuals`.
+- `city.js`: ciudad Lumeria y Torre Celeste. Exporta `window.CITY` (r=30 muralla, tr=7 torre, sx/sz=punto de inicio, door=entrada de la mazmorra, guild=gremio). Se engancha envolviendo `window.build` y `window.updVisuals`; maneja colisiones con muralla, torre y casas.
+- Orden en index.html antes de `</body>`: enemies.js, visuals.js y luego city.js. En el bucle principal, justo antes de `renderer.render`: `updEnemies` y `updVisuals`.
 - `manifest.json`, `sw.js`, `icon-192.png`, `icon-512.png`: PWA instalable (horizontal).
 - `version.json`: versión actual para el aviso de actualización.
 - APK: `package.json`, `capacitor.config.json` (carga la URL de Pages), `www/index.html` (página de respaldo), `.github/workflows/apk.yml`, `.gitignore` (excluye node_modules, android, *.keystore, *.b64).
@@ -68,13 +69,13 @@ El jugador despierta reencarnado en otro mundo, con un "Sistema" que le da misio
 - [x] v0.5.0: slimes con IA, combate, gelatina para curarte, fogata como zona segura, más slimes de noche (enemies.js)
 - [x] v0.6.0: estilo anime (visuals.js): cámara baja con horizonte, sol y luna, nubes, estrellas, luciérnagas, árboles redondos de colores, hierba y flores, agua con ondas, personaje anime animado, contornos, viñeta
 - [x] v0.6.1: menos luciérnagas
+- [x] v0.7.0: paleta DanMachi (cielo, pasto y arboles claros) + ciudad amurallada Lumeria con la Torre Celeste (city.js): 4 puertas, casas, gremio (solo el edificio), farolas, cerezos, zona segura sin slimes
 
 ### 🔧 EN CURSO
-- [ ] Adaptar el estilo a DanMachi (paleta clara, ciudad con torre, mazmorra, bendición)
+- [ ] Adaptar el estilo a DanMachi (hecho: paleta y ciudad; falta mazmorra v0.8 y bendicion v0.9)
 - [ ] Confirmar que la APK horizontal se instala encima de la anterior sin desinstalar
 
 ### 📋 PENDIENTE (orden propuesto)
-- [ ] v0.7: paleta DanMachi + ciudad amurallada con torre blanca/azul en el centro
 - [ ] v0.8: entrada a la mazmorra por la torre, pisos con monstruos (goblins, kobolds, slimes) y jefe de piso
 - [ ] v0.9: bendición (ventana de estado con 5 stats que suben por hazañas) y gremio con misiones del Sistema
 - [ ] Primer arco de historia
@@ -85,3 +86,4 @@ El jugador despierta reencarnado en otro mundo, con un "Sistema" que le da misio
 ## 8. Notas para el siguiente chat
 - El usuario prueba en el teléfono (Chrome, PWA o APK) y reporta cómo se ve y se siente; a veces manda capturas.
 - Si el teléfono va lento: bajar `const N = 5200` (hierba) en visuals.js y `FN` (luciérnagas).
+- v0.7.0: el terreno es plano hasta radio 34 (funcion H). Puertas en E, N, O, S. La entrada de la mazmorra (v0.8) esta en el lado sur de la torre (CITY.door). El gremio (v0.9) es el edificio azul junto a la plaza (CITY.guild).

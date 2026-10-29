@@ -26,7 +26,7 @@
     for (let t = 0; t < 10; t++) {
       const a = Math.random() * 6.2832, d = 22 + Math.random() * 22;
       const x = S.x + Math.cos(a) * d, z = S.z + Math.sin(a) * d;
-      if (Math.hypot(x, z) > R - 2 || Math.hypot(x, z) < 10 || H(x, z) < -1.4) continue;
+      if (Math.hypot(x, z) > R - 2 || Math.hypot(x, z) < 40 || H(x, z) < -1.4) continue;
       const c = COLORS[Math.floor(Math.random() * COLORS.length)];
       const m = toon(c);
       const g = new THREE.Group();
@@ -120,7 +120,7 @@
         e.wa += (Math.random() - .5) * dt * 3;
         e.x += Math.cos(e.wa) * .6 * dt; e.z += Math.sin(e.wa) * .6 * dt;
       }
-      if (H(e.x, e.z) < -1.6 || Math.hypot(e.x, e.z) > R) { e.x = px; e.z = pz; e.wa += 2; }
+      if (H(e.x, e.z) < -1.6 || Math.hypot(e.x, e.z) > R || Math.hypot(e.x, e.z) < 36) { e.x = px; e.z = pz; e.wa += 2; }
       const b = Math.sin(now / 200 + e.ph);
       e.g.position.set(e.x, H(e.x, e.z), e.z);
       e.g.scale.set(1 + b * .06, 1 - b * .06, 1 + b * .06);

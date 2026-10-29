@@ -51,7 +51,7 @@
   }
   function blob(r, x, y, z) { const g = new THREE.IcosahedronGeometry(r, 1); g.translate(x, y, z); return g; }
   const crownGeo = merge([blob(1.25, 0, 0, 0), blob(.85, .8, -.35, .3), blob(.8, -.75, -.3, -.25), blob(.7, .1, .6, -.5)]);
-  const crownMats = [0x3ea85c, 0x5ccf72, 0x2f9e57, 0xf7a8c8, 0xe8a23a].map(c => toon(c));
+  const crownMats = [0x52c26e, 0x7ae08a, 0x44b86a, 0xffb3d1, 0xffc85a].map(c => toon(c));
 
   function decorateTrees() {
     objs.forEach(o => {
@@ -81,12 +81,12 @@
     while (i < N && tries < N * 4) {
       tries++;
       const x = (r() * 2 - 1) * 96, z = (r() * 2 - 1) * 96, h = H(x, z);
-      if (h < -1.3 || Math.hypot(x, z) < 2.5) continue;
+      if (h < -1.3 || Math.hypot(x, z) < 32) continue;
       e.set((r() - .5) * .4, r() * 6.28, (r() - .5) * .4); q.setFromEuler(e);
       const s = .8 + r() * .9;
       sc.set(s, s * (.8 + r() * .7), s); p.set(x, h, z);
       m4.compose(p, q, sc); gi.setMatrixAt(i, m4);
-      col.setHSL(.26 + r() * .07, .55 + r() * .15, .38 + r() * .14 + Math.max(0, h) * .015);
+      col.setHSL(.26 + r() * .07, .55 + r() * .15, .46 + r() * .14 + Math.max(0, h) * .015);
       gi.setColorAt(i, col); i++;
     }
     gi.count = i; gi.frustumCulled = false;
@@ -101,7 +101,7 @@
     while (j < FN && tries < FN * 4) {
       tries++;
       const x = (r() * 2 - 1) * 96, z = (r() * 2 - 1) * 96, h = H(x, z);
-      if (h < -1.3 || Math.hypot(x, z) < 2.5) continue;
+      if (h < -1.3 || Math.hypot(x, z) < 32) continue;
       q.identity(); sc.set(1, 1, 1); p.set(x, h + .32, z);
       m4.compose(p, q, sc); fi.setMatrixAt(j, m4);
       col.setHex(pal[Math.floor(r() * pal.length)]); fi.setColorAt(j, col); j++;
@@ -270,7 +270,7 @@
     ccol.setHex(0x222a55).lerp(tmpC.setHex(0xffffff), k).lerp(tmpC.setHex(0xffc08a), dusk * .35);
     clouds.forEach(m => m.color.copy(ccol));
 
-    water.material.color.setHex(0x2a3d88).lerp(tmpC.setHex(0x6cc0ff), k);
+    water.material.color.setHex(0x2a3d88).lerp(tmpC.setHex(0x86d4ff), k);
     wtex.offset.x += dt * .015; wtex.offset.y += dt * .01;
     water.position.y = -2 + Math.sin(now / 900) * .05;
 
