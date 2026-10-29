@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>Isekai Online</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1b1442">
+<link rel="apple-touch-icon" href="icon-192.png">
 <style>
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html{background:#cfeaff}
@@ -65,7 +68,7 @@ input{font-size:16px;padding:12px;border-radius:12px;border:none;outline:none;-w
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
-const VERSION='0.3.0';
+const VERSION='0.3.1';
 const SB_URL='https://hjyzemewygrornzmmmzx.supabase.co';
 const SB_KEY='sb_publishable_DvQhAKfaqMNWJkwDVNEOEQ_khnv0HsQ';
 const LS='isekai_guest_v3',CYC=300,R=92;
@@ -318,6 +321,7 @@ function loop(now){
   renderer.render(scene,cam);
 }
 requestAnimationFrame(loop);
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 </body>
 </html>

@@ -13,13 +13,13 @@ El jugador despierta reencarnado en otro mundo, sin recuerdos, con un "sistema" 
 - **Supervivencia:** hambre, clima, recolección, crafteo, construir base/aldea.
 - **Progresión RPG:** niveles, clases, habilidades que evolucionan, stats visibles.
 - **Online ligero:** gremios, comercio, chat, eventos mundiales, mazmorras cooperativas (más adelante).
-- **Mundo procedural:** siempre hay algo nuevo por explorar (mundo generado por semilla, igual en todos los dispositivos de la cuenta).
+- **Mundo procedural:** mundo generado por semilla guardada en la partida (igual en todos los dispositivos de la cuenta).
 - **Look:** 3D estilizado tipo anime isekai (cel-shading, cielo grande, colores vivos, ciclo día/noche).
 
 ## 3. Reglas de trabajo (importante)
 1. **El usuario trabaja desde el teléfono con Termux.** Nada de pasos que requieran PC.
 2. **Respuestas cortas y claras**, fáciles de leer en pantalla pequeña.
-3. **El código se entrega SIEMPRE en bloques para copiar y pegar en Termux** con `cat > archivo << 'EOF'` ... `EOF`, archivos completos.
+3. **El código se entrega SIEMPRE en bloques para copiar y pegar en Termux** con `cat > archivo << 'EOF'` ... `EOF`. Para cambios muy pequeños en archivos grandes se permite `sed` con verificación.
 4. **Cada vez que se termine algo, se marca como HECHO** en la sección 6 y se actualiza este archivo.
 5. Al final de cada tarea, entregar el **CONTEXTO.md actualizado** (también en formato cat/EOF).
 6. **Todo debe ser gratis** (hosting, base de datos, compilación de la APK).
@@ -39,9 +39,9 @@ El jugador despierta reencarnado en otro mundo, sin recuerdos, con un "sistema" 
 - Base de datos y cuentas: **Supabase (plan gratis)**. URL del proyecto: https://hjyzemewygrornzmmmzx.supabase.co (la clave publishable está en index.html; NUNCA compartir la service_role ni la contraseña de la BD).
 - Tabla `saves` (user_id, data jsonb, updated_at) con RLS: cada jugador solo ve y edita su partida.
 - Guardado: nube (Supabase) si hay cuenta; localStorage si se juega como invitado.
-- Hosting gratis: Cloudflare Pages o Netlify conectado al repo (pendiente de configurar).
-- APK: envoltorio (Capacitor/WebView) compilado con GitHub Actions; carga el juego desde el hosting, así se actualiza con cada push. Aviso de versión nueva con version.json.
-- Primero PWA (app instalable) y después la APK.
+- Hosting gratis: **Cloudflare Pages** conectado al repo (rama main, sin build, salida en la raíz). Cada push publica solo.
+- PWA: manifest.json + sw.js + íconos (instalable desde Chrome). sw.js: red primero para archivos propios, caché para librerías CDN; version.json nunca se cachea.
+- APK: envoltorio (Capacitor/WebView) compilado con GitHub Actions; carga el juego desde el hosting, así se actualiza con cada push.
 
 ## 6. Registro de progreso
 
@@ -52,16 +52,18 @@ El jugador despierta reencarnado en otro mundo, sin recuerdos, con un "sistema" 
 - [x] index.html v0.1 y v0.2 (versión 2D: recolección, hambre, nivel, crafteo, guardado local)
 - [x] Crear el proyecto en Supabase
 - [x] index.html v0.3 (3D): terreno, cielo con día/noche, personaje, joystick y cámara, árboles/rocas/bayas, recolección, hambre, vida, nivel, crafteo (hacha, pico, fogata), login con Supabase, guardado en la nube, aviso de nueva versión
+- [x] Subir v0.3 al repo
+- [x] v0.3.1: archivos PWA creados (manifest.json, sw.js, icon-192.png, icon-512.png)
 
 ### 🔧 EN CURSO
-- [ ] Confirmar que la tabla `saves` está creada en Supabase (SQL ejecutado) y desactivar "Confirm email" para pruebas
-- [ ] Subir v0.3 al repo y probarla en el teléfono
+- [ ] Subir v0.3.1 y publicar en Cloudflare Pages
+- [ ] Confirmar que la tabla `saves` existe y que login y guardado en la nube funcionan
+- [ ] Poner el link de Pages como Site URL en Supabase (Authentication → URL Configuration)
+- [ ] Instalar la PWA desde Chrome y probarla
 
 ### 📋 PENDIENTE
+- [ ] APK con GitHub Actions (Capacitor, carga la URL de Pages)
 - [ ] Optimizar rendimiento si va lento (instancing de árboles y rocas)
-- [ ] Publicar en Cloudflare Pages o Netlify
-- [ ] PWA (instalable, con ícono)
-- [ ] APK con GitHub Actions
 - [ ] Mejorar estética anime: contornos, nubes, estrellas, flores, agua animada
 - [ ] Enemigos y combate básico
 - [ ] Misiones y primer arco de historia (Fase 2)
@@ -69,3 +71,4 @@ El jugador despierta reencarnado en otro mundo, sin recuerdos, con un "sistema" 
 
 ## 7. Notas para el siguiente chat
 - Los objetos del mundo se generan con la semilla guardada en la partida; los recolectados se guardan por id en `got`.
+- Para probar en local: `python -m http.server 8080` y abrir http://localhost:8080
