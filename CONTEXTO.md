@@ -50,6 +50,7 @@ El jugador despierta reencarnado en otro mundo, con un "Sistema" que le da misio
 - `world.js`: animales (conejos wander/huida, boton Atrapar) y clima (lluvia/niebla cada 70-140 s, solo cosmetico). Envuelve updVisuals; va despues de story.js. Cambia scene.fog.near/far cada frame fuera de la mazmorra.
 - `village.js`: Aldea Brisa en el terreno mas plano a 48-70 de la ciudad (se calcula con H, igual en todos los dispositivos). NPCs tomas/lina (mision repetible, S.vl) y barto (tienda con S.val). Brujula arriba a la izquierda. Va despues de world.js.
 - `sellos.js`: sitios de Sello en el terreno mas plano hacia 3 direcciones (d 64-80). Guardianes (golems) solo activos si S.arc.c>=3; se atacan con el boton Atacar (listener propio). S.sl=[0,0,0]. Anade capitulos con window.STORY_CH (story.js lo expone junto a STORY_FL). Va despues de village.js.
+- `arco3.js`: Arco 3 (capitulos 7-9 en STORY_CH). Detecta la derrota del jefe del piso 15 (S.dur=1, jefe El Durmiente, creado con 2 sed en dungeon.js). Va despues de sellos.js.
 - Orden en index.html antes de `</body>`: enemies.js, visuals.js, city.js, dungeon.js, controls.js, guild.js y luego story.js. En el bucle principal, justo antes de `renderer.render`: `updEnemies` y `updVisuals`.
 - `manifest.json`, `sw.js`, `icon-192.png`, `icon-512.png`: PWA instalable (horizontal).
 - `version.json`: versión actual para el aviso de actualización.
@@ -90,9 +91,10 @@ El jugador despierta reencarnado en otro mundo, con un "Sistema" que le da misio
 - [x] v0.11.0: mundo mas vivo (world.js): 22 conejos que huyen y se atrapan con boton Atrapar (+3 comida, S.hunt), clima aleatorio (despejado, lluvia, niebla) con gotas, niebla y filtro gris
 - [x] v0.12.0: Aldea Brisa (village.js): casas, pozo, aldeanos Tomas (madera) y Lina (bayas) con misiones repetibles que escalan (S.vl), y tienda de Barto con valis; brujula a la aldea
 - [x] v0.13.0: Arco 2 "Los Sellos Rotos" (sellos.js): 3 sitios de ruinas (Alba, Bosque, Ocaso) con guardianes de piedra, Piedras de Sello (S.sl), brujula, 3 capitulos nuevos que se suman a story.js (STORY_CH)
+- [x] v0.14.0: Arco 3 "Lo que Duerme Abajo" (arco3.js): 3 capitulos (piso 12, jefe El Durmiente en piso 15, limpiar 25 monstruos) con recompensas y stats
 - [ ] Mundo más vivo: más aldeas o eventos (animales, clima y Aldea Brisa ya hechos)
 - [ ] Optimizar rendimiento si hace falta (bajar hierba: const N en visuals.js)
-- [ ] Online en tiempo real (al final)
+- [ ] Online en tiempo real (siguiente, Arco 4)
 
 ## 8. Notas para el siguiente chat
 - El usuario prueba en el teléfono (Chrome, PWA o APK) y reporta cómo se ve y se siente; a veces manda capturas.

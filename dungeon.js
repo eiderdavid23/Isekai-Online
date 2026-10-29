@@ -84,8 +84,8 @@
       spawn(R() < Math.min(.8, (f - 1) * .25) ? 'goblin' : 'kobold', f, x, z);
     }
     if (isBoss) {
-      const B = [{ n: 'Rey Goblin', c: 0x4f9a35, k: 1 }, { n: 'Capitán Kobold', c: 0xb0502e, k: 0 }, { n: 'Gólem de Piedra', c: 0x7a82a8, k: 0 }][(f / 3 - 1) % 3];
-      const kk = 1 + .16 * (f - 1), e = mk(B.k ? 'goblin' : 'kobold', B.c, 2.3, B.k);
+      const B = f == 15 ? { n: 'El Durmiente', c: 0x4a2a7a, k: 0 } : [{ n: 'Rey Goblin', c: 0x4f9a35, k: 1 }, { n: 'Capitán Kobold', c: 0xb0502e, k: 0 }, { n: 'Gólem de Piedra', c: 0x7a82a8, k: 0 }][(f / 3 - 1) % 3];
+      const kk = 1 + .16 * (f - 1), e = mk(B.k ? 'goblin' : 'kobold', B.c, f == 15 ? 3.3 : 2.3, B.k);
       boss = { g: e.g, mats: e.mats, base: e.base, arms: e.arms, x: 0, z: 8, hp: Math.round(200 * kk), max: Math.round(200 * kk), dmg: Math.round(12 + f * 1.6), sp: 2.7, xp: 10, reach: 3, acd: 1.3, cd: 1, name: B.n, boss: true, fl: 0, lunge: 0, ph: 0, wa: 0 };
       grp.add(e.g); mons.push(boss);
     }
