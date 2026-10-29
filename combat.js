@@ -1,4 +1,4 @@
-/* Isekai Online - combate animado y habilidades (v0.15.0) */
+/* Isekai Online - combate animado y habilidades (v0.16.0) */
 (function () {
   const $ = id => document.getElementById(id);
   const PI = Math.PI, TAU = PI * 2, rnd = Math.random;
@@ -27,34 +27,42 @@
   /* ---------- interfaz ---------- */
   const css = document.createElement('style');
   css.textContent = `
-#skl{position:fixed;z-index:6;right:calc(env(safe-area-inset-right,0px) + 262px);bottom:calc(env(safe-area-inset-bottom,0px) + 10px);width:140px;height:200px;pointer-events:none}
-#skl .skb{position:absolute;pointer-events:auto;display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:50%;border:2px solid rgba(255,255,255,.8);color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.7);box-shadow:0 4px 10px rgba(0,0,0,.35);padding:0;line-height:1;touch-action:none;user-select:none;-webkit-user-select:none;transition:transform .08s,opacity .15s}
-#skl .skb:active{transform:scale(.9);filter:brightness(1.2)}
-#skl .skb .ic{font-size:24px}#skl .skb .lb{font-size:9px;font-weight:700;margin-top:1px}
 #skn{display:none;position:fixed;z-index:30;left:50%;top:calc(env(safe-area-inset-top,0px) + 70px);transform:translateX(-50%);text-align:center;padding:10px 22px;border-radius:16px;background:linear-gradient(160deg,rgba(40,28,100,.95),rgba(20,14,60,.95));border:2px solid #ffd25e;color:#fff;box-shadow:0 0 22px rgba(255,210,94,.6);pointer-events:none;max-width:80vw}
 #skn small{display:block;color:#ffd25e;font-size:11px;letter-spacing:1px}#skn b{font-size:20px}#skn div{font-size:12px;opacity:.9;margin-top:2px}
 #cflash{position:fixed;inset:0;z-index:24;background:#fff;opacity:0;pointer-events:none;transition:opacity .25s}
 `;
   document.head.appendChild(css);
-  const box = document.createElement('div'); box.id = 'skl'; document.body.appendChild(box);
+  const box = $('ctl') || document.body;
   const bn = document.createElement('div'); bn.id = 'skn'; document.body.appendChild(bn);
   const fl = document.createElement('div'); fl.id = 'cflash'; document.body.appendChild(fl);
-  const BT = {};
+  const BT = {}; const joyEl = $('joy');
   let qJump = false, qDash = false, qAtk = false, qSpin = false, qWave = false, qUlt = false;
-  function mkb(id, ic, lb, l, b, sz, bg, fn) {
+  function mkb(id, ic, lb, bg, fn) {
     const e = document.createElement('button');
-    e.style.cssText = 'left:' + l + 'px;bottom:' + b + 'px;width:' + sz + 'px;height:' + sz + 'px;background:' + bg + ';display:none';
-    e.className = 'skb'; e.innerHTML = '<span class="ic">' + ic + '</span><span class="lb">' + lb + '</span>';
+    e.className = 'b cb round skb'; e.style.background = bg; e.style.display = 'none';
+    e.innerHTML = '<span class="ic">' + ic + '</span><span class="lb">' + lb + '</span>';
     e.addEventListener('pointerdown', ev => { ev.preventDefault(); ev.stopPropagation(); fn(); });
-    box.appendChild(e); BT[id] = { e, lb: e.querySelector('.lb'), n: lb };
+    if (window.ctlAdd) window.ctlAdd(e, id); else box.appendChild(e);
+    BT[id] = { e, lb: e.querySelector('.lb'), n: lb };
   }
-  mkb('jump', '⬆️', 'Salto', 74, 0, 62, 'linear-gradient(160deg,#8fd0ff,#4a78ff)', () => { qJump = true; });
-  mkb('dash', '💨', 'Dash', 74, 70, 56, 'linear-gradient(160deg,#b9f0ff,#3fb6d9)', () => { qDash = true; });
-  mkb('spin', '🌀', 'Torbellino', 8, 0, 56, 'linear-gradient(160deg,#9af0c8,#1aa57a)', () => { qSpin = true; });
-  mkb('wave', '🌙', 'Onda', 8, 64, 56, 'linear-gradient(160deg,#c9b8ff,#7a5cff)', () => { qWave = true; });
-  mkb('ult', '🌟', 'Corte', 40, 128, 62, 'linear-gradient(160deg,#ffe27a,#ff6a8a)', () => { qUlt = true; });
+  mkb('jump', '⬆️', 'Salto', 'linear-gradient(160deg,#8fd0ff,#4a78ff)', () => { qJump = true; });
+  mkb('dash', '💨', 'Dash', 'linear-gradient(160deg,#b9f0ff,#3fb6d9)', () => { qDash = true; });
+  mkb('spin', '🌀', 'Giro', 'linear-gradient(160deg,#9af0c8,#1aa57a)', () => { qSpin = true; });
+  mkb('wave', '🌙', 'Onda', 'linear-gradient(160deg,#c9b8ff,#7a5cff)', () => { qWave = true; });
+  mkb('ult', '🌟', 'Corte', 'linear-gradient(160deg,#ffe27a,#ff6a8a)', () => { qUlt = true; });
+  /* Atacar: se activa al tocar (aunque otro dedo esté en el joystick) y repite el combo mientras lo mantienes */
   const atkBtn = $('atk');
-  if (atkBtn) atkBtn.addEventListener('click', () => { qAtk = true; });
+  let attHeld = false, attPtr = null, bufAtk = 0;
+  const legacyHit = () => { if (atkBtn) atkBtn.click(); };
+  if (atkBtn) {
+    atkBtn.addEventListener('click', e => { if (e.isTrusted) { e.stopImmediatePropagation(); e.preventDefault(); } }, true);
+    atkBtn.addEventListener('pointerdown', e => {
+      e.preventDefault(); attPtr = e.pointerId; attHeld = true; qAtk = true;
+      try { atkBtn.setPointerCapture(e.pointerId); } catch (_) { }
+    });
+    const rel = e => { if (e.pointerId === attPtr) { attHeld = false; attPtr = null; } };
+    atkBtn.addEventListener('pointerup', rel); atkBtn.addEventListener('pointercancel', rel); atkBtn.addEventListener('lostpointercapture', rel);
+  }
   addEventListener('keydown', e => {
     if (e.repeat) return;
     if (e.code == 'Space') qJump = true; else if (e.code == 'ShiftLeft') qDash = true; else if (e.code == 'KeyJ') qAtk = true;
@@ -255,7 +263,7 @@
     if (lastRy !== null && tw !== 0 && player.rotation.y === lastRy) player.rotation.y -= tw;
     tw = 0;
     tm += dt; fy0 = player.rotation.y;
-    checkUnlock(); banner(dt);
+    checkUnlock(); banner(dt); joyEl.classList.toggle('run', !!window.RUN);
     const gnd = player.position.y;
     Object.keys(cdL).forEach(k => { cdL[k] = Math.max(0, cdL[k] - dt); const b = BT[k]; if (b) { b.lb.textContent = cdL[k] > 0 ? Math.ceil(cdL[k]) + 's' : b.n; b.e.style.opacity = cdL[k] > 0 ? .5 : 1; } });
     acd = Math.max(0, acd - dt); since += dt; hold = Math.max(0, hold - dt); inv = Math.max(0, inv - dt);
@@ -267,11 +275,12 @@
     if (qSpin) { qSpin = false; doSpin(); }
     if (qWave) { qWave = false; doWave(); }
     if (qUlt) { qUlt = false; doUlt(); }
-    if (qAtk) {
-      qAtk = false;
-      if (S.hp > 0 && acd <= 0 && !(sk.on && sk.id == 'ult')) {
-        if (air && has('plunge') && !plunge && !sk.on) startPlunge(); else if (!sk.on && !plunge) startAtk();
-      }
+    if (qAtk) { qAtk = false; bufAtk = .5; }
+    bufAtk = Math.max(0, bufAtk - dt);
+    /* ataque continuo: lo tocado se guarda .5 s (aunque estés en una habilidad) y mantener pulsado repite el combo */
+    if (S.hp > 0 && acd <= 0 && !sk.on && !plunge && (bufAtk > 0 || (attHeld && !air))) {
+      bufAtk = 0; legacyHit(); fy0 = player.rotation.y;
+      if (air && has('plunge')) startPlunge(); else startAtk();
     }
     const fx = Math.sin(fy0), fz = Math.cos(fy0);
 
@@ -371,7 +380,7 @@
     arms[1].rotation.y = 0; arms[1].rotation.z = .06 + .03 * sw; arms[0].rotation.y = 0; arms[0].rotation.z = -(.06 + .03 * Math.sin(now / 600 + 1));
     const inHand = hold > 0 || atk.on || sk.on || plunge || dashT > 0;
     held.visible = inHand; if (back) back.visible = !inHand;
-    let lt = Math.hypot(jx, jy) > .1 ? .1 : 0;
+    let lt = Math.hypot(jx, jy) > .1 ? (window.RUN ? .26 : .1) : 0;
     if (armPose) {
       const P = armPose;
       arms[0].quaternion.copy(P.type == 'h' ? mul(qa(AZ, P.tilt), qa(AX, -PI / 2), qa(AZ, P.v)) : mul(qa(AZ, P.tilt), qa(AX, P.v)));

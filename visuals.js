@@ -290,8 +290,8 @@
 
     const mv = Math.hypot(jx, jy) > .1 && S.hp > 0;
     amp += ((mv ? 1 : 0) - amp) * Math.min(1, dt * 10);
-    wph += dt * 10 * amp;
-    const swg = Math.sin(wph) * .7 * amp;
+    wph += dt * (window.RUN ? 15 : 8.5) * amp;
+    const swg = Math.sin(wph) * (window.RUN ? .95 : .7) * amp;
     legs[0].rotation.x = swg; legs[1].rotation.x = -swg;
     arms[0].rotation.x = -swg * .8; arms[1].rotation.x = swg * .8;
     capeG.rotation.x = .08 + amp * .3 * (.6 + .4 * Math.sin(wph * 2));

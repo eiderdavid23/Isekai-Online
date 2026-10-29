@@ -83,7 +83,7 @@ input{font-size:16px;padding:12px;border-radius:12px;border:none;outline:none;-w
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
-const VERSION='0.15.0';
+const VERSION='0.16.0';
 const SB_URL='https://hjyzemewygrornzmmmzx.supabase.co';
 const SB_KEY='sb_publishable_DvQhAKfaqMNWJkwDVNEOEQ_khnv0HsQ';
 const LS='isekai_guest_v3',CYC=300,R=92;
@@ -235,7 +235,7 @@ function craft(k){
 document.querySelectorAll('[data-k]').forEach(b=>b.onclick=()=>craft(b.dataset.k));
 
 /* ---------- controles ---------- */
-let jx=0,jy=0,jid=null;const joy=$('joy'),knob=$('knob');
+let jx=0,jy=0,jid=null;const RUN_T=.78;const joy=$('joy'),knob=$('knob');
 function jset(e){
   const r=joy.getBoundingClientRect();let dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2);
   const m=Math.hypot(dx,dy),max=r.width/2-10;if(m>max){dx*=max/m;dy*=max/m}
@@ -309,16 +309,16 @@ function loop(now){
   const dt=Math.min(.05,(now-last)/1000);last=now;
   if(!started)return;
   S.t+=dt;
-  const mag=Math.hypot(jx,jy);let moving=false;
+  const mag=Math.hypot(jx,jy);let moving=false;window.RUN=false;
   if(mag>.1){
     const f=-jy,rg=jx;
     const mx=Math.sin(camYaw)*f-Math.cos(camYaw)*rg,mz=Math.cos(camYaw)*f+Math.sin(camYaw)*rg;
-    const l=Math.hypot(mx,mz)||1,sp=(5.5+Math.min(2,((S.st&&S.st.agi)||0)/250))*Math.min(1,mag);
+    const l=Math.hypot(mx,mz)||1,ag=Math.min(2,((S.st&&S.st.agi)||0)/250),run=mag>=RUN_T,sp=run?7.2+ag:(3.4+ag*.5)*Math.max(.4,mag/RUN_T);window.RUN=run;
     const nx=S.x+mx/l*sp*dt,nz=S.z+mz/l*sp*dt;
     if(Math.hypot(nx,nz)<R&&H(nx,nz)>-1.9){S.x=nx;S.z=nz;moving=true;dirty=true}
     player.rotation.y=Math.atan2(mx,mz);
   }
-  if(moving)walk+=dt*10;
+  if(moving)walk+=dt*(window.RUN?15:10);
   const fire=nearFire();
   if(fire)S.hp=Math.min(100,S.hp+3*dt);
   else{S.hg=Math.max(0,S.hg-.2*dt);if(S.hg<=0)S.hp-=2*dt}
@@ -331,7 +331,7 @@ function loop(now){
   tick+=dt;
   if(tick>.5){
     tick=0;hud();updSky();
-    const o=nearest();$('grab').textContent='✋ Recolectar'+(o?' '+({T:'🌲',R:'🪨',B:'🫐'})[o.type]:'');
+    const o=nearest();$('grab').innerHTML='<span class="ic">'+(o?({T:'🌲',R:'🪨',B:'🫐'})[o.type]:'✋')+'</span><span class="lb">Recoger</span>';$('grab').style.opacity=o?1:.6;
   }
   if(window.updEnemies)updEnemies(dt,now);
   if(window.updVisuals)updVisuals(dt,now);

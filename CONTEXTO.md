@@ -30,6 +30,8 @@ El jugador despierta reencarnado en otro mundo, con un "Sistema" que le da misio
 7. Nunca pedir ni guardar claves secretas (service_role, contraseñas, tokens, la llave isekai.keystore). La clave `sb_publishable` sí es pública y está bien en el código.
 8. Antes de afirmar algo sobre precios, límites o planes de servicios, comprobarlo (buscar en la web).
 9. Si hay dudas de diseño, proponer una opción recomendada y preguntar una sola cosa a la vez.
+10. **Archivos o parches largos (mas de ~80 lineas): dividir en partes.** Parte 1 con `cat > archivo << 'EOF'` y las siguientes con `cat >> archivo << 'EOF'`; despues de cada parte, `wc -l archivo` diciendo cuantas lineas deben salir. Si un pegado se corta, reescribir el archivo completo.
+11. Para cambios en varios archivos grandes, preferir un script `parche_vX.py` (en partes si es largo) que haga los reemplazos con verificacion, en vez de muchos `sed`.
 
 ## 4. Flujo de publicación
 - `git push` a la rama main → **GitHub Pages** publica en 1 a 2 minutos → el juego muestra el aviso "Nueva versión disponible" si el número cambió.
@@ -44,14 +46,14 @@ El jugador despierta reencarnado en otro mundo, con un "Sistema" que le da misio
 - `visuals.js`: estilo anime. Se engancha con `window.updVisuals(dt, now)`, expone `window.outlineGroup(grupo)` y envuelve `window.build` para redondear los árboles.
 - `city.js`: ciudad Lumeria y Torre Celeste. Exporta `window.CITY` (r=30 muralla, tr=7 torre, sx/sz=punto de inicio, door=entrada de la mazmorra, guild=gremio). Se engancha envolviendo `window.build` y `window.updVisuals`; maneja colisiones con muralla, torre y casas.
 - `dungeon.js`: mazmorra. Vive en el mismo x,z que la ciudad pero 300 unidades mas abajo (DY=-300), arena circular de radio 25. Pone `window.DGON=true` dentro (city.js se pausa). Usa el boton Atacar de enemies.js agregando su propio click. Envuelve `window.updVisuals` y `window.die`.
-- `controls.js`: reacomoda los botones (mueve los nodos existentes a #ctl y al menu #mpan, no se crean botones nuevos) y activa setPointerCapture en el canvas. Va al final: debe cargar despues de enemies.js y dungeon.js.
+- `controls.js`: controles tactiles (v0.16.0). Tabla de diseno `L` arriba del archivo: [tamano, x, y] de cada boton (centro medido desde la esquina inferior derecha de #ctl). Expone `window.ctlAdd(el, id)` (combat.js lo usa para colocar sus habilidades). Atacar, Curar, Comer y Recoger se activan con pointerdown (funcionan con otro dedo en el joystick; el click real se bloquea para no duplicar). Menu 🎒 con Fabricar y Salir. Anillo punteado en el joystick = umbral de correr. Va despues de enemies.js y dungeon.js.
 - `guild.js`: bendicion (S.st = fue,res,des,agi,mag; rango = letra por cada 100 puntos) y gremio (boton contextual cerca de la puerta del gremio, S.bl = ya recibio la bendicion, S.qs = misiones, S.val = valis, S.gt = totales recolectados). Sube stats comparando S cada frame, sin tocar otros archivos. Efectos: fuerza=dano, agilidad=velocidad, magia=cura (con sed en enemies.js, dungeon.js, index.html); resistencia=regeneracion y destreza=recoleccion extra (dentro de guild.js).
 - `story.js`: arco de historia (S.arc = c capitulo, ph fase 0 hablar/1 objetivo, b base). NPCs Orvin (-10,4) y Eldara (0,25, puerta norte) con marcador ! ? y boton Hablar; dialogos por toque; diario arriba a la izquierda. Se engancha a updVisuals y va despues de guild.js.
 - `world.js`: animales (conejos wander/huida, boton Atrapar) y clima (lluvia/niebla cada 70-140 s, solo cosmetico). Envuelve updVisuals; va despues de story.js. Cambia scene.fog.near/far cada frame fuera de la mazmorra.
 - `village.js`: Aldea Brisa en el terreno mas plano a 48-70 de la ciudad (se calcula con H, igual en todos los dispositivos). NPCs tomas/lina (mision repetible, S.vl) y barto (tienda con S.val). Brujula arriba a la izquierda. Va despues de world.js.
 - `sellos.js`: sitios de Sello en el terreno mas plano hacia 3 direcciones (d 64-80). Guardianes (golems) solo activos si S.arc.c>=3; se atacan con el boton Atacar (listener propio). S.sl=[0,0,0]. Anade capitulos con window.STORY_CH (story.js lo expone junto a STORY_FL). Va despues de village.js.
 - `arco3.js`: Arco 3 (capitulos 7-9 en STORY_CH). Detecta la derrota del jefe del piso 15 (S.dur=1, jefe El Durmiente, creado con 2 sed en dungeon.js). Va despues de sellos.js.
-- `combat.js`: animaciones y habilidades (botones en #skl). Usa window.AOE_SL (enemies.js), AOE_DG (dungeon.js) y AOE_SS (sellos.js), agregados por parche_v15.py. Habilidades por nivel: Dash 2, Doble salto 3, Golpe aereo 4, Torbellino 6, Onda 8, Corte Celeste 12. Va al final, despues de arco3.js.
+- `combat.js`: animaciones y habilidades (botones en #ctl). Usa window.AOE_SL (enemies.js), AOE_DG (dungeon.js) y AOE_SS (sellos.js), agregados por parche_v15.py. Habilidades por nivel: Dash 2, Doble salto 3, Golpe aereo 4, Torbellino 6, Onda 8, Corte Celeste 12. Va al final, despues de arco3.js. v0.16.0: botones en #ctl (ya no existe #skl); ataque continuo (mantener Atacar repite el combo, tocar durante una habilidad se guarda 0.5 s); correr = empujar el joystick a fondo (mag >= RUN_T=.78 en index.html, window.RUN), andar = menos de eso.
 - Orden en index.html antes de `</body>`: enemies.js, visuals.js, city.js, dungeon.js, controls.js, guild.js y luego story.js. En el bucle principal, justo antes de `renderer.render`: `updEnemies` y `updVisuals`.
 - `manifest.json`, `sw.js`, `icon-192.png`, `icon-512.png`: PWA instalable (horizontal).
 - `version.json`: versión actual para el aviso de actualización.
@@ -94,6 +96,7 @@ El jugador despierta reencarnado en otro mundo, con un "Sistema" que le da misio
 - [x] v0.13.0: Arco 2 "Los Sellos Rotos" (sellos.js): 3 sitios de ruinas (Alba, Bosque, Ocaso) con guardianes de piedra, Piedras de Sello (S.sl), brujula, 3 capitulos nuevos que se suman a story.js (STORY_CH)
 - [x] v0.14.0: Arco 3 "Lo que Duerme Abajo" (arco3.js): 3 capitulos (piso 12, jefe El Durmiente en piso 15, limpiar 25 monstruos) con recompensas y stats
 - [x] v0.15.0: combate animado (combat.js): combo de 3 golpes, salto, dash con esquiva, doble salto, golpe aereo, Torbellino, Onda de espada y Corte Celeste; se desbloquean por nivel (S.skn)
+- [x] v0.16.0: controles rediseñados (botones compactos en arco abajo a la derecha, tabla L en controls.js), correr con el joystick (anillo punteado, window.RUN), ataque continuo (mantener Atacar, buffer durante habilidades, botones por pointerdown para multitoque)
 - [ ] Mundo más vivo: más aldeas o eventos (animales, clima y Aldea Brisa ya hechos)
 - [ ] Optimizar rendimiento si hace falta (bajar hierba: const N en visuals.js)
 - [ ] Online en tiempo real (siguiente, Arco 4)
