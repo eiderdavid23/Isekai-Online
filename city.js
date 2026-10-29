@@ -271,7 +271,7 @@
   let t4 = 0, wasIn = null, doorCd = 0, px = null, pz = null;
   window.updVisuals = function (dt, now) {
     if (_uv) _uv(dt, now);
-    if (!S || !started) return;
+    if (!S || !started || window.DGON) return;
     if (px === null || Math.hypot(S.x - px, S.z - pz) > 4) { px = S.x; pz = S.z; }
     const r = resolve(S.x, S.z, px, pz);
     if (r[0] !== S.x || r[1] !== S.z) {
@@ -286,7 +286,7 @@
     if (wasIn !== null && inside !== wasIn) say(inside ? '🏰 ' + CITY.name + ', ciudad de la ' + CITY.tower + '. Zona segura: aquí no entran los slimes.' : '🌿 Sales de ' + CITY.name + '. Cuidado con los slimes.');
     wasIn = inside;
     doorCd -= dt;
-    if (doorCd <= 0 && Math.hypot(S.x - CITY.door.x, S.z - CITY.door.z) < 3) { doorCd = 12; say('🕳️ La puerta de la ' + CITY.tower + ' está sellada… (la mazmorra llega en la v0.8)'); }
+    if (!window.DG && doorCd <= 0 && Math.hypot(S.x - CITY.door.x, S.z - CITY.door.z) < 3) { doorCd = 12; say('🕳️ La puerta de la ' + CITY.tower + ' está sellada… (la mazmorra llega en la v0.8)'); }
     portal.material.opacity = .65 + .25 * Math.sin(now / 420);
     t4 += dt;
     if (t4 > .4) {
