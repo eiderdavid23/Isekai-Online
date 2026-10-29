@@ -213,4 +213,5 @@
       } else hint.style.display = 'none';
     }
   };
+  window.AOE_SS = function (x, z, r, dmg) { let n = 0; if (window.DGON || !act()) return 0; SITE.forEach(s => s.gs.forEach(e => { if (!e.alive) return; if (Math.hypot(e.x - x, e.z - z) < r) { n++; if (dmg > 0) { e.hp -= dmg; e.fl = .12; e.bm.color.setHex(0xffffff); if (e.hp <= 0) kill(e); } } })); return n; };
 })();

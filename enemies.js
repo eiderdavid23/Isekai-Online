@@ -128,4 +128,5 @@
     }
     tk += dt; if (tk > .5) { tk = 0; showGel(); }
   };
+  window.AOE_SL = function (x, z, r, dmg, kb) { let n = 0; SL.slice().forEach(e => { const d = Math.hypot(e.x - x, e.z - z); if (d < r) { n++; if (dmg > 0) { e.hp -= dmg; e.fl = .12; e.m.color.setHex(0xffffff); const k = d || 1, nx = e.x + (e.x - x) / k * kb, nz = e.z + (e.z - z) / k * kb; if (H(nx, nz) > -1.6) { e.x = nx; e.z = nz; } if (e.hp <= 0) kill(e); } } }); return n; };
 })();

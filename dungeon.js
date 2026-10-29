@@ -249,4 +249,5 @@
     if (boss) { dgbi.style.width = Math.max(0, boss.hp / boss.max * 100) + '%'; if (mons.indexOf(boss) < 0) boss = null; label(); }
     if (!boss && !mons.length && !clearedMsg) { clearedMsg = true; say('✅ Piso despejado. Baja por el portal violeta.'); }
   };
+  window.AOE_DG = function (x, z, r, dmg, kb) { let n = 0; mons.slice().forEach(e => { const d = Math.hypot(e.x - x, e.z - z) - (e.boss ? 1.2 : 0); if (d < r) { n++; if (dmg > 0) { e.hp -= dmg; e.fl = .12; e.mats.forEach(m => m.color.setHex(0xffffff)); const k = Math.hypot(e.x - x, e.z - z) || 1, f = e.boss ? .15 : 1; e.x += (e.x - x) / k * kb * f; e.z += (e.z - z) / k * kb * f; if (e.hp <= 0) kill(e); } } }); return n; };
 })();

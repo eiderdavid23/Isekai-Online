@@ -51,6 +51,7 @@ El jugador despierta reencarnado en otro mundo, con un "Sistema" que le da misio
 - `village.js`: Aldea Brisa en el terreno mas plano a 48-70 de la ciudad (se calcula con H, igual en todos los dispositivos). NPCs tomas/lina (mision repetible, S.vl) y barto (tienda con S.val). Brujula arriba a la izquierda. Va despues de world.js.
 - `sellos.js`: sitios de Sello en el terreno mas plano hacia 3 direcciones (d 64-80). Guardianes (golems) solo activos si S.arc.c>=3; se atacan con el boton Atacar (listener propio). S.sl=[0,0,0]. Anade capitulos con window.STORY_CH (story.js lo expone junto a STORY_FL). Va despues de village.js.
 - `arco3.js`: Arco 3 (capitulos 7-9 en STORY_CH). Detecta la derrota del jefe del piso 15 (S.dur=1, jefe El Durmiente, creado con 2 sed en dungeon.js). Va despues de sellos.js.
+- `combat.js`: animaciones y habilidades (botones en #skl). Usa window.AOE_SL (enemies.js), AOE_DG (dungeon.js) y AOE_SS (sellos.js), agregados por parche_v15.py. Habilidades por nivel: Dash 2, Doble salto 3, Golpe aereo 4, Torbellino 6, Onda 8, Corte Celeste 12. Va al final, despues de arco3.js.
 - Orden en index.html antes de `</body>`: enemies.js, visuals.js, city.js, dungeon.js, controls.js, guild.js y luego story.js. En el bucle principal, justo antes de `renderer.render`: `updEnemies` y `updVisuals`.
 - `manifest.json`, `sw.js`, `icon-192.png`, `icon-512.png`: PWA instalable (horizontal).
 - `version.json`: versión actual para el aviso de actualización.
@@ -92,6 +93,7 @@ El jugador despierta reencarnado en otro mundo, con un "Sistema" que le da misio
 - [x] v0.12.0: Aldea Brisa (village.js): casas, pozo, aldeanos Tomas (madera) y Lina (bayas) con misiones repetibles que escalan (S.vl), y tienda de Barto con valis; brujula a la aldea
 - [x] v0.13.0: Arco 2 "Los Sellos Rotos" (sellos.js): 3 sitios de ruinas (Alba, Bosque, Ocaso) con guardianes de piedra, Piedras de Sello (S.sl), brujula, 3 capitulos nuevos que se suman a story.js (STORY_CH)
 - [x] v0.14.0: Arco 3 "Lo que Duerme Abajo" (arco3.js): 3 capitulos (piso 12, jefe El Durmiente en piso 15, limpiar 25 monstruos) con recompensas y stats
+- [x] v0.15.0: combate animado (combat.js): combo de 3 golpes, salto, dash con esquiva, doble salto, golpe aereo, Torbellino, Onda de espada y Corte Celeste; se desbloquean por nivel (S.skn)
 - [ ] Mundo más vivo: más aldeas o eventos (animales, clima y Aldea Brisa ya hechos)
 - [ ] Optimizar rendimiento si hace falta (bajar hierba: const N en visuals.js)
 - [ ] Online en tiempo real (siguiente, Arco 4)
