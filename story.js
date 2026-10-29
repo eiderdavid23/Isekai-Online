@@ -31,10 +31,11 @@
       f: 'orvin', to: 'eldara', g: 5, p: P2, base: null, t: 'Alcanza el piso 5 de la mazmorra 🕳️',
       intro: ['Hay más fragmentos, y algo los reúne en lo profundo. Desciende hasta el piso 5 y mira qué hay allí.', 'Cuando vuelvas, cuéntale a Eldara lo que viste. La Guardia debe saberlo.'],
       pend: ['Sigue descendiendo por la mazmorra. Necesito que llegues al piso 5; luego habla con Eldara.'],
-      outro: ['¿Piso 5? Entonces era cierto: la Torre susurra… y pronunció tu nombre.', 'Orvin y yo investigaremos esos susurros. Lumeria te debe mucho, Reencarnado.', '📖 Fin del Arco 1: «El Susurro de la Torre». El Arco 2 llegará pronto.'], val: 300, xp: 15, st: ['fue', 'res', 'des', 'agi', 'mag'], sn: 10, end: true
+      outro: ['¿Piso 5? Entonces era cierto: la Torre susurra… y pronunció tu nombre.', 'Orvin y yo investigaremos esos susurros. Lumeria te debe mucho, Reencarnado.', '📖 Fin del Arco 1: «El Susurro de la Torre». Habla con Orvin para comenzar el Arco 2.'], val: 300, xp: 15, st: ['fue', 'res', 'des', 'agi', 'mag'], sn: 10, end: true
     }
   ];
 
+  window.STORY_CH = CH; window.STORY_FL = FL;
   function ensure() {
     if (!S.arc) S.arc = { c: 0, ph: 0, b: 0 };
     return S.arc;
@@ -97,7 +98,7 @@
     if (!S || !started) { tq.style.display = 'none'; return; }
     const a = ensure(), c = CH[a.c];
     if (!c) { tq.style.display = 'none'; return; }
-    let t = '📖 Arco 1 · Cap. ' + (a.c + 1) + '/' + CH.length + '<br>';
+    let t = '📖 Arco ' + (c.arc || 1) + ' · Cap. ' + (c.n || a.c + 1) + '/3<br>';
     if (a.ph == 0) t += c.need && !c.need() ? 'Recibe la Bendición en el Gremio' : 'Habla con ' + NP[c.f].n + ' 💬';
     else { const p = Math.min(c.g, Math.max(0, c.p())); t += p >= c.g ? 'Vuelve con ' + NP[c.to].n + ' 💬' : c.t + ' (' + p + '/' + c.g + ')'; }
     tq.innerHTML = t; tq.style.display = 'block';
