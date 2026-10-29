@@ -48,6 +48,7 @@ El jugador despierta reencarnado en otro mundo, con un "Sistema" que le da misio
 - `guild.js`: bendicion (S.st = fue,res,des,agi,mag; rango = letra por cada 100 puntos) y gremio (boton contextual cerca de la puerta del gremio, S.bl = ya recibio la bendicion, S.qs = misiones, S.val = valis, S.gt = totales recolectados). Sube stats comparando S cada frame, sin tocar otros archivos. Efectos: fuerza=dano, agilidad=velocidad, magia=cura (con sed en enemies.js, dungeon.js, index.html); resistencia=regeneracion y destreza=recoleccion extra (dentro de guild.js).
 - `story.js`: arco de historia (S.arc = c capitulo, ph fase 0 hablar/1 objetivo, b base). NPCs Orvin (-10,4) y Eldara (0,25, puerta norte) con marcador ! ? y boton Hablar; dialogos por toque; diario arriba a la izquierda. Se engancha a updVisuals y va despues de guild.js.
 - `world.js`: animales (conejos wander/huida, boton Atrapar) y clima (lluvia/niebla cada 70-140 s, solo cosmetico). Envuelve updVisuals; va despues de story.js. Cambia scene.fog.near/far cada frame fuera de la mazmorra.
+- `village.js`: Aldea Brisa en el terreno mas plano a 48-70 de la ciudad (se calcula con H, igual en todos los dispositivos). NPCs tomas/lina (mision repetible, S.vl) y barto (tienda con S.val). Brujula arriba a la izquierda. Va despues de world.js.
 - Orden en index.html antes de `</body>`: enemies.js, visuals.js, city.js, dungeon.js, controls.js, guild.js y luego story.js. En el bucle principal, justo antes de `renderer.render`: `updEnemies` y `updVisuals`.
 - `manifest.json`, `sw.js`, `icon-192.png`, `icon-512.png`: PWA instalable (horizontal).
 - `version.json`: versión actual para el aviso de actualización.
@@ -86,7 +87,8 @@ El jugador despierta reencarnado en otro mundo, con un "Sistema" que le da misio
 ### 📋 PENDIENTE (orden propuesto)
 - [x] v0.10.0: Primer arco "El Susurro de la Torre" (story.js): NPCs Orvin y Eldara, 3 capitulos, diario de mision
 - [x] v0.11.0: mundo mas vivo (world.js): 22 conejos que huyen y se atrapan con boton Atrapar (+3 comida, S.hunt), clima aleatorio (despejado, lluvia, niebla) con gotas, niebla y filtro gris
-- [ ] Mundo más vivo: aldeas y NPCs de aldea (animales y clima ya hechos en v0.11.0)
+- [x] v0.12.0: Aldea Brisa (village.js): casas, pozo, aldeanos Tomas (madera) y Lina (bayas) con misiones repetibles que escalan (S.vl), y tienda de Barto con valis; brujula a la aldea
+- [ ] Mundo más vivo: más aldeas o eventos (animales, clima y Aldea Brisa ya hechos)
 - [ ] Optimizar rendimiento si hace falta (bajar hierba: const N en visuals.js)
 - [ ] Online en tiempo real (al final)
 
