@@ -35,11 +35,11 @@ El jugador despierta reencarnado en otro mundo, sin recuerdos, con un "sistema" 
 
 ## 5. Decisiones tomadas
 - Plataforma: **web (HTML/JS) en 3D con Three.js r128**, pensada para programarse y jugarse desde el teléfono.
-- Repo en GitHub (privado): **Isekai-Online**. Archivos creados con Termux (cat/EOF) y subidos con git add, commit, push.
+- Repo en GitHub (público, necesario para Pages gratis): **Isekai-Online**. Archivos creados con Termux (cat/EOF) y subidos con git add, commit, push.
 - Base de datos y cuentas: **Supabase (plan gratis)**. URL del proyecto: https://hjyzemewygrornzmmmzx.supabase.co (la clave publishable está en index.html; NUNCA compartir la service_role ni la contraseña de la BD).
 - Tabla `saves` (user_id, data jsonb, updated_at) con RLS: cada jugador solo ve y edita su partida.
 - Guardado: nube (Supabase) si hay cuenta; localStorage si se juega como invitado.
-- Hosting gratis: **Cloudflare Pages** conectado al repo (rama main, sin build, salida en la raíz). Cada push publica solo.
+- Hosting gratis: **GitHub Pages** (rama main, carpeta raíz). Link: https://eiderdavid23.github.io/Isekai-Online/ . Cada push publica solo. Si algún día se quiere repo privado o uso comercial, migrar a Cloudflare Pages.
 - PWA: manifest.json + sw.js + íconos (instalable desde Chrome). sw.js: red primero para archivos propios, caché para librerías CDN; version.json nunca se cachea.
 - APK: envoltorio (Capacitor/WebView) compilado con GitHub Actions; carga el juego desde el hosting, así se actualiza con cada push.
 
@@ -56,7 +56,7 @@ El jugador despierta reencarnado en otro mundo, sin recuerdos, con un "sistema" 
 - [x] v0.3.1: archivos PWA creados (manifest.json, sw.js, icon-192.png, icon-512.png)
 
 ### 🔧 EN CURSO
-- [ ] Subir v0.3.1 y publicar en Cloudflare Pages
+- [ ] Subir v0.3.1 y publicar en GitHub Pages
 - [ ] Confirmar que la tabla `saves` existe y que login y guardado en la nube funcionan
 - [ ] Poner el link de Pages como Site URL en Supabase (Authentication → URL Configuration)
 - [ ] Instalar la PWA desde Chrome y probarla
