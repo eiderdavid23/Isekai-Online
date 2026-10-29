@@ -54,6 +54,7 @@ El jugador despierta reencarnado en otro mundo, con un "Sistema" que le da misio
 - `sellos.js`: sitios de Sello en el terreno mas plano hacia 3 direcciones (d 64-80). Guardianes (golems) solo activos si S.arc.c>=3; se atacan con el boton Atacar (listener propio). S.sl=[0,0,0]. Anade capitulos con window.STORY_CH (story.js lo expone junto a STORY_FL). Va despues de village.js.
 - `arco3.js`: Arco 3 (capitulos 7-9 en STORY_CH). Detecta la derrota del jefe del piso 15 (S.dur=1, jefe El Durmiente, creado con 2 sed en dungeon.js). Va despues de sellos.js.
 - `combat.js`: animaciones y habilidades (botones en #ctl). Usa window.AOE_SL (enemies.js), AOE_DG (dungeon.js) y AOE_SS (sellos.js), agregados por parche_v15.py. Habilidades por nivel: Dash 2, Doble salto 3, Golpe aereo 4, Torbellino 6, Onda 8, Corte Celeste 12. Va al final, despues de arco3.js. v0.16.0: botones en #ctl (ya no existe #skl); ataque continuo (mantener Atacar repite el combo, tocar durante una habilidad se guarda 0.5 s); correr = empujar el joystick a fondo (mag >= RUN_T=.78 en index.html, window.RUN), andar = menos de eso.
+- `ajustes.js`: ajustes dentro del menu 🎒 (v0.17.0). Camara 3a/1a persona (boton 📷, tecla V; guarda en localStorage `isekai_cam`; en 1a persona oculta el cuerpo, pone la camara en la cabeza y muestra una mira; envuelve updEnemies para girar el cuerpo hacia camYaw y updVisuals para colocar la camara al final). Calidad alta/baja (boton 🖥️, `isekai_q`; baja = pixelRatio 1). Va despues de combat.js.
 - Orden en index.html antes de `</body>`: enemies.js, visuals.js, city.js, dungeon.js, controls.js, guild.js y luego story.js. En el bucle principal, justo antes de `renderer.render`: `updEnemies` y `updVisuals`.
 - `manifest.json`, `sw.js`, `icon-192.png`, `icon-512.png`: PWA instalable (horizontal).
 - `version.json`: versión actual para el aviso de actualización.
@@ -97,6 +98,7 @@ El jugador despierta reencarnado en otro mundo, con un "Sistema" que le da misio
 - [x] v0.14.0: Arco 3 "Lo que Duerme Abajo" (arco3.js): 3 capitulos (piso 12, jefe El Durmiente en piso 15, limpiar 25 monstruos) con recompensas y stats
 - [x] v0.15.0: combate animado (combat.js): combo de 3 golpes, salto, dash con esquiva, doble salto, golpe aereo, Torbellino, Onda de espada y Corte Celeste; se desbloquean por nivel (S.skn)
 - [x] v0.16.0: controles rediseñados (botones compactos en arco abajo a la derecha, tabla L en controls.js), correr con el joystick (anillo punteado, window.RUN), ataque continuo (mantener Atacar, buffer durante habilidades, botones por pointerdown para multitoque)
+- [x] v0.17.0: ajustes (ajustes.js): camara en 1a persona o 3a persona y calidad grafica alta/baja, desde el menu 🎒
 - [ ] Mundo más vivo: más aldeas o eventos (animales, clima y Aldea Brisa ya hechos)
 - [ ] Optimizar rendimiento si hace falta (bajar hierba: const N en visuals.js)
 - [ ] Online en tiempo real (siguiente, Arco 4)
