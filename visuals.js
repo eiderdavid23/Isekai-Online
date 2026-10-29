@@ -163,10 +163,10 @@
     g.addColorStop(0, 'rgba(255,250,170,1)'); g.addColorStop(.4, 'rgba(255,240,120,.5)'); g.addColorStop(1, 'rgba(255,240,120,0)');
     c.fillStyle = g; c.fillRect(0, 0, 32, 32);
   });
-  const FN = 60, ffOff = [], ffArr = new Float32Array(FN * 3);
+  const FN = 18, ffOff = [], ffArr = new Float32Array(FN * 3);
   for (let i = 0; i < FN; i++) ffOff.push({ x: Math.random() * 30, z: Math.random() * 30, y: .8 + Math.random() * 3, p: Math.random() * 6.28 });
   const ffG = new THREE.BufferGeometry(); ffG.setAttribute('position', new THREE.BufferAttribute(ffArr, 3));
-  const ffM = new THREE.PointsMaterial({ map: ffTex, size: 14, sizeAttenuation: false, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending, fog: false });
+  const ffM = new THREE.PointsMaterial({ map: ffTex, size: 10, sizeAttenuation: false, transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending, fog: false });
   const ff = new THREE.Points(ffG, ffM); ff.frustumCulled = false; scene.add(ff);
 
   /* ---------- agua con ondas ---------- */
