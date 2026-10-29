@@ -46,7 +46,8 @@ El jugador despierta reencarnado en otro mundo, con un "Sistema" que le da misio
 - `dungeon.js`: mazmorra. Vive en el mismo x,z que la ciudad pero 300 unidades mas abajo (DY=-300), arena circular de radio 25. Pone `window.DGON=true` dentro (city.js se pausa). Usa el boton Atacar de enemies.js agregando su propio click. Envuelve `window.updVisuals` y `window.die`.
 - `controls.js`: reacomoda los botones (mueve los nodos existentes a #ctl y al menu #mpan, no se crean botones nuevos) y activa setPointerCapture en el canvas. Va al final: debe cargar despues de enemies.js y dungeon.js.
 - `guild.js`: bendicion (S.st = fue,res,des,agi,mag; rango = letra por cada 100 puntos) y gremio (boton contextual cerca de la puerta del gremio, S.bl = ya recibio la bendicion, S.qs = misiones, S.val = valis, S.gt = totales recolectados). Sube stats comparando S cada frame, sin tocar otros archivos. Efectos: fuerza=dano, agilidad=velocidad, magia=cura (con sed en enemies.js, dungeon.js, index.html); resistencia=regeneracion y destreza=recoleccion extra (dentro de guild.js).
-- Orden en index.html antes de `</body>`: enemies.js, visuals.js, city.js, dungeon.js, controls.js y luego guild.js. En el bucle principal, justo antes de `renderer.render`: `updEnemies` y `updVisuals`.
+- `story.js`: arco de historia (S.arc = c capitulo, ph fase 0 hablar/1 objetivo, b base). NPCs Orvin (-10,4) y Eldara (0,25, puerta norte) con marcador ! ? y boton Hablar; dialogos por toque; diario arriba a la izquierda. Se engancha a updVisuals y va despues de guild.js.
+- Orden en index.html antes de `</body>`: enemies.js, visuals.js, city.js, dungeon.js, controls.js, guild.js y luego story.js. En el bucle principal, justo antes de `renderer.render`: `updEnemies` y `updVisuals`.
 - `manifest.json`, `sw.js`, `icon-192.png`, `icon-512.png`: PWA instalable (horizontal).
 - `version.json`: versión actual para el aviso de actualización.
 - APK: `package.json`, `capacitor.config.json` (carga la URL de Pages), `www/index.html` (página de respaldo), `.github/workflows/apk.yml`, `.gitignore` (excluye node_modules, android, *.keystore, *.b64).
@@ -82,7 +83,7 @@ El jugador despierta reencarnado en otro mundo, con un "Sistema" que le da misio
 - [ ] Confirmar que la APK horizontal se instala encima de la anterior sin desinstalar
 
 ### 📋 PENDIENTE (orden propuesto)
-- [ ] Primer arco de historia
+- [x] v0.10.0: Primer arco "El Susurro de la Torre" (story.js): NPCs Orvin y Eldara, 3 capitulos, diario de mision
 - [ ] Mundo más vivo: NPCs, aldeas, animales, clima
 - [ ] Optimizar rendimiento si hace falta (bajar hierba: const N en visuals.js)
 - [ ] Online en tiempo real (al final)
