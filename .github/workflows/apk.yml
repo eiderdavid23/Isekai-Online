@@ -33,6 +33,11 @@ jobs:
       - name: Crear proyecto Android
         run: npx cap add android
 
+      - name: Bloquear horizontal
+        run: |
+          sed -i 's|<activity|<activity android:screenOrientation="sensorLandscape"|' android/app/src/main/AndroidManifest.xml
+          grep -q sensorLandscape android/app/src/main/AndroidManifest.xml
+
       - name: Poner el ícono
         run: |
           rm -rf android/app/src/main/res/mipmap-anydpi-v26

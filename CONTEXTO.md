@@ -35,6 +35,7 @@ El jugador despierta reencarnado en otro mundo, sin recuerdos, con un "sistema" 
 
 ## 5. Decisiones tomadas
 - Plataforma: **web (HTML/JS) en 3D con Three.js r128**, pensada para programarse y jugarse desde el teléfono.
+- Orientación: el juego es HORIZONTAL (landscape): CSS adaptado en index.html, manifest con orientation landscape y APK bloqueada con sensorLandscape en el workflow.
 - Repo en GitHub (público, necesario para Pages gratis): **Isekai-Online**. Archivos creados con Termux (cat/EOF) y subidos con git add, commit, push.
 - Base de datos y cuentas: **Supabase (plan gratis)**. URL del proyecto: https://hjyzemewygrornzmmmzx.supabase.co (la clave publishable está en index.html; NUNCA compartir la service_role ni la contraseña de la BD).
 - Tabla `saves` (user_id, data jsonb, updated_at) con RLS: cada jugador solo ve y edita su partida.
@@ -56,6 +57,7 @@ El jugador despierta reencarnado en otro mundo, sin recuerdos, con un "sistema" 
 - [x] Subir v0.3 al repo
 - [x] v0.3.1: archivos PWA creados (manifest.json, sw.js, icon-192.png, icon-512.png)
 - [x] Archivos de la APK creados: package.json, capacitor.config.json, www/index.html, .gitignore y workflow .github/workflows/apk.yml
+- [x] v0.4.0: diseño horizontal (HUD, joystick y botones reacomodados, aviso para girar el teléfono, APK y PWA bloqueadas en horizontal)
 - [x] APK con llave fija: secreto DEBUG_KEYSTORE_BASE64 creado y workflow Build APK compilando y publicando en Releases
 
 ### 🔧 EN CURSO
