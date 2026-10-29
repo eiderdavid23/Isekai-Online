@@ -83,7 +83,7 @@ input{font-size:16px;padding:12px;border-radius:12px;border:none;outline:none;-w
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
-const VERSION='0.8.1';
+const VERSION='0.9.0';
 const SB_URL='https://hjyzemewygrornzmmmzx.supabase.co';
 const SB_KEY='sb_publishable_DvQhAKfaqMNWJkwDVNEOEQ_khnv0HsQ';
 const LS='isekai_guest_v3',CYC=300,R=92;
@@ -313,7 +313,7 @@ function loop(now){
   if(mag>.1){
     const f=-jy,rg=jx;
     const mx=Math.sin(camYaw)*f-Math.cos(camYaw)*rg,mz=Math.cos(camYaw)*f+Math.sin(camYaw)*rg;
-    const l=Math.hypot(mx,mz)||1,sp=5.5*Math.min(1,mag);
+    const l=Math.hypot(mx,mz)||1,sp=(5.5+Math.min(2,((S.st&&S.st.agi)||0)/250))*Math.min(1,mag);
     const nx=S.x+mx/l*sp*dt,nz=S.z+mz/l*sp*dt;
     if(Math.hypot(nx,nz)<R&&H(nx,nz)>-1.9){S.x=nx;S.z=nz;moving=true;dirty=true}
     player.rotation.y=Math.atan2(mx,mz);
@@ -345,5 +345,6 @@ if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(
 <script src="city.js"></script>
 <script src="dungeon.js"></script>
 <script src="controls.js"></script>
+<script src="guild.js"></script>
 </body>
 </html>

@@ -131,7 +131,7 @@
     for (let k = 0; k < e.xp; k++) gain();
     let m = '☠️ ' + e.name + ' derrotado.';
     if (Math.random() < .35 || e.boss) { const n = e.boss ? 3 : 1; S.food += n; m += ' +' + n + ' 🫐'; }
-    if (e.boss) { locked = false; recolor(dn, 0x9b7bff); dgb.style.display = 'none'; m = '👑 ¡' + e.name + ' derrotado! El portal violeta se abre. +' + e.xp + ' XP'; }
+    if (e.boss) { S.bosses = (S.bosses || 0) + 1; locked = false; recolor(dn, 0x9b7bff); dgb.style.display = 'none'; m = '👑 ¡' + e.name + ' derrotado! El portal violeta se abre. +' + e.xp + ' XP'; }
     hud(); say(m); dirty = true;
   }
   function attack() {
@@ -141,7 +141,7 @@
     mons.forEach(e => { const d = Math.hypot(e.x - S.x, e.z - S.z) - (e.boss ? 1.2 : 0); if (d < bd) { bd = d; best = e; } });
     if (!best) return;
     player.rotation.y = Math.atan2(best.x - S.x, best.z - S.z);
-    const dmg = 8 + S.lv * 2 + (S.axe ? 5 : 0) + Math.floor(Math.random() * 4);
+    const dmg = 8 + S.lv * 2 + (S.axe ? 5 : 0) + Math.floor(((S.st && S.st.fue) || 0) / 12) + Math.floor(Math.random() * 4);
     best.hp -= dmg; best.fl = .12; best.mats.forEach(m => m.color.setHex(0xffffff));
     const d = Math.hypot(best.x - S.x, best.z - S.z) || 1, kb = best.boss ? .3 : .9;
     best.x += (best.x - S.x) / d * kb; best.z += (best.z - S.z) / d * kb;

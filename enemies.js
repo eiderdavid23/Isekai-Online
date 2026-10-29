@@ -69,7 +69,7 @@
     SL.forEach(e => { const d = Math.hypot(e.x - S.x, e.z - S.z); if (d < bd) { bd = d; best = e; } });
     if (!best) { say('⚔️ Atacas al aire…'); return; }
     player.rotation.y = Math.atan2(best.x - S.x, best.z - S.z);
-    const dmg = 8 + S.lv * 2 + (S.axe ? 5 : 0) + Math.floor(Math.random() * 4);
+    const dmg = 8 + S.lv * 2 + (S.axe ? 5 : 0) + Math.floor(((S.st && S.st.fue) || 0) / 12) + Math.floor(Math.random() * 4);
     best.hp -= dmg; best.fl = .12; best.m.color.setHex(0xffffff);
     const d = Math.hypot(best.x - S.x, best.z - S.z) || 1;
     const nx = best.x + (best.x - S.x) / d * .8, nz = best.z + (best.z - S.z) / d * .8;
@@ -81,7 +81,7 @@
     if (!started) return;
     if ((S.gel || 0) < 2) { say('Necesitas 2 🧪 gelatina para curarte.'); return; }
     if (S.hp >= 100) { say('Ya tienes la vida llena.'); return; }
-    S.gel -= 2; S.hp = Math.min(100, S.hp + 35);
+    S.gel -= 2; S.hp = Math.min(100, S.hp + 35 + Math.floor(((S.st && S.st.mag) || 0) / 12));
     say('🧪 Te curas +35 de vida.'); hud(); showGel(); dirty = true;
   }
 
