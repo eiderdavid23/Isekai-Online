@@ -43,6 +43,14 @@ jobs:
             cp icon-512.png android/app/src/main/res/mipmap-$d/ic_launcher_foreground.png
           done
 
+      - name: Restaurar llave fija
+        env:
+          KS: ${{ secrets.DEBUG_KEYSTORE_BASE64 }}
+        run: |
+          test -n "$KS" || { echo "Falta el secreto DEBUG_KEYSTORE_BASE64"; exit 1; }
+          mkdir -p ~/.android
+          echo "$KS" | base64 -d > ~/.android/debug.keystore
+
       - name: Sincronizar
         run: npx cap sync android
 

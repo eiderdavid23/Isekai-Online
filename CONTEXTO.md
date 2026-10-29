@@ -42,6 +42,7 @@ El jugador despierta reencarnado en otro mundo, sin recuerdos, con un "sistema" 
 - Hosting gratis: **GitHub Pages** (rama main, carpeta raíz). Link: https://eiderdavid23.github.io/Isekai-Online/ . Cada push publica solo. Si algún día se quiere repo privado o uso comercial, migrar a Cloudflare Pages.
 - PWA: manifest.json + sw.js + íconos (instalable desde Chrome). sw.js: red primero para archivos propios, caché para librerías CDN; version.json nunca se cachea.
 - APK: envoltorio (Capacitor/WebView) compilado con GitHub Actions; carga el juego desde el hosting, así se actualiza con cada push.
+- Firma de la APK: llave fija (alias androiddebugkey) guardada como secreto DEBUG_KEYSTORE_BASE64 en GitHub; el workflow la restaura en ~/.android/debug.keystore. El archivo ~/isekai.keystore vive FUERA del repo; guardar copia de respaldo (si se pierde, hay que reinstalar la APK una vez). NUNCA subirlo al repo.
 
 ## 6. Registro de progreso
 
@@ -63,7 +64,7 @@ El jugador despierta reencarnado en otro mundo, sin recuerdos, con un "sistema" 
 - [ ] Instalar la PWA desde Chrome y probarla
 
 ### 📋 PENDIENTE
-- [ ] APK: correr el workflow Build APK en GitHub Actions, descargarla desde Releases e instalarla
+- [ ] APK con llave fija: crear el secreto, correr Build APK, instalarla (desinstalar la anterior solo esta vez)
 - [ ] Optimizar rendimiento si va lento (instancing de árboles y rocas)
 - [ ] Mejorar estética anime: contornos, nubes, estrellas, flores, agua animada
 - [ ] Enemigos y combate básico
