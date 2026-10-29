@@ -56,15 +56,16 @@ El jugador despierta reencarnado en otro mundo, sin recuerdos, con un "sistema" 
 - [x] Subir v0.3 al repo
 - [x] v0.3.1: archivos PWA creados (manifest.json, sw.js, icon-192.png, icon-512.png)
 - [x] Archivos de la APK creados: package.json, capacitor.config.json, www/index.html, .gitignore y workflow .github/workflows/apk.yml
+- [x] APK con llave fija: secreto DEBUG_KEYSTORE_BASE64 creado y workflow Build APK compilando y publicando en Releases
 
 ### 🔧 EN CURSO
 - [ ] Subir v0.3.1 y publicar en GitHub Pages
 - [ ] Confirmar que la tabla `saves` existe y que login y guardado en la nube funcionan
 - [ ] Poner el link de Pages como Site URL en Supabase (Authentication → URL Configuration)
 - [ ] Instalar la PWA desde Chrome y probarla
+- [ ] Instalar la APK (desinstalar la vieja solo esta vez) y probar login y guardado en la nube
 
 ### 📋 PENDIENTE
-- [ ] APK con llave fija: crear el secreto, correr Build APK, instalarla (desinstalar la anterior solo esta vez)
 - [ ] Optimizar rendimiento si va lento (instancing de árboles y rocas)
 - [ ] Mejorar estética anime: contornos, nubes, estrellas, flores, agua animada
 - [ ] Enemigos y combate básico
