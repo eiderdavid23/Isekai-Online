@@ -36,6 +36,7 @@
       g.add(b, e1, e2);
       g.position.set(x, H(x, z), z);
       scene.add(g);
+      if(window.outlineGroup)outlineGroup(g);
       const hp = 24 + S.lv * 3;
       SL.push({ g, m, c, x, z, hp, wa: Math.random() * 6.28, ph: Math.random() * 6.28, cd: .5, fl: 0 });
       return;

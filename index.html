@@ -83,7 +83,7 @@ input{font-size:16px;padding:12px;border-radius:12px;border:none;outline:none;-w
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
-const VERSION='0.5.0';
+const VERSION='0.6.0';
 const SB_URL='https://hjyzemewygrornzmmmzx.supabase.co';
 const SB_KEY='sb_publishable_DvQhAKfaqMNWJkwDVNEOEQ_khnv0HsQ';
 const LS='isekai_guest_v3',CYC=300,R=92;
@@ -334,11 +334,13 @@ function loop(now){
     const o=nearest();$('grab').textContent='✋ Recolectar'+(o?' '+({T:'🌲',R:'🪨',B:'🫐'})[o.type]:'');
   }
   if(window.updEnemies)updEnemies(dt,now);
+  if(window.updVisuals)updVisuals(dt,now);
   renderer.render(scene,cam);
 }
 requestAnimationFrame(loop);
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
 </script>
 <script src="enemies.js"></script>
+<script src="visuals.js"></script>
 </body>
 </html>

@@ -35,6 +35,7 @@ El jugador despierta reencarnado en otro mundo, sin recuerdos, con un "sistema" 
 
 ## 5. Decisiones tomadas
 - Plataforma: **web (HTML/JS) en 3D con Three.js r128**, pensada para programarse y jugarse desde el teléfono.
+- Prioridades del usuario (de mayor a menor): 1) gráficos estilo anime, 2) historia y misiones del Sistema, 3) mundo más vivo (aldeas, NPCs, animales, clima), 4) online.
 - Código modular: index.html (núcleo) + enemies.js (slimes y combate, IIFE que se engancha con window.updEnemies). Los sistemas nuevos van en archivos .js aparte con IIFE y nombres que no choquen con los globales de index.html.
 - Orientación: el juego es HORIZONTAL (landscape): CSS adaptado en index.html, manifest con orientation landscape y APK bloqueada con sensorLandscape en el workflow.
 - Repo en GitHub (público, necesario para Pages gratis): **Isekai-Online**. Archivos creados con Termux (cat/EOF) y subidos con git add, commit, push.
@@ -58,6 +59,7 @@ El jugador despierta reencarnado en otro mundo, sin recuerdos, con un "sistema" 
 - [x] Subir v0.3 al repo
 - [x] v0.3.1: archivos PWA creados (manifest.json, sw.js, icon-192.png, icon-512.png)
 - [x] Archivos de la APK creados: package.json, capacitor.config.json, www/index.html, .gitignore y workflow .github/workflows/apk.yml
+- [x] v0.6.0: estilo anime (visuals.js): cámara más baja con horizonte, sol y luna, nubes, estrellas, luciérnagas, árboles redondos de colores, hierba y flores, agua con ondas, personaje anime nuevo animado, contornos, viñeta
 - [x] v0.5.0: slimes con IA (patrullan, persiguen, atacan), combate con botón de ataque, gelatina para curarte, fogata como zona segura, más slimes de noche (enemies.js)
 - [x] v0.4.0: diseño horizontal (HUD, joystick y botones reacomodados, aviso para girar el teléfono, APK y PWA bloqueadas en horizontal)
 - [x] APK con llave fija: secreto DEBUG_KEYSTORE_BASE64 creado y workflow Build APK compilando y publicando en Releases
@@ -71,7 +73,7 @@ El jugador despierta reencarnado en otro mundo, sin recuerdos, con un "sistema" 
 
 ### 📋 PENDIENTE
 - [ ] Optimizar rendimiento si va lento (instancing de árboles y rocas)
-- [ ] Mejorar estética anime: contornos, nubes, estrellas, flores, agua animada
+- [ ] Seguir mejorando el look anime (animales y NPCs con estilo, hierba con viento, efectos de combate, modelos mejores)
 - [ ] Más enemigos (lobos, jefe de zona), animales y más drops
 - [ ] Misiones y primer arco de historia (Fase 2)
 - [ ] Online en tiempo real (Fase 4)
